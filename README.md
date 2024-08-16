@@ -7,7 +7,7 @@ This web scraper tool allows you to scrape and extract content from any website 
 
 ## Features
 
-Extracts content from anchor (<a>), paragraph (<p>), and heading (<h1> to <h6>) tags.
+Extracts content from anchor (<a>), paragraph (<p>), and heading h1 to h6 tags.
 Exports scraped data in Excel sheet format.
 Auto-downloads all images from the specified URL.
 Organized and easy-to-navigate output.
