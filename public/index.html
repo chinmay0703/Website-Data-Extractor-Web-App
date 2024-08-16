@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraper</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 600px;
+        }
+
+        label {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            text-align: left;
+            width: 100%;
+        }
+
+        input[type="url"] {
+            padding: 10px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            width: 100%;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        button.loading {
+            pointer-events: none;
+        }
+
+        button.loading::after {
+            content: '';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 3px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            width: 16px;
+            height: 16px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #message {
+            margin-top: 20px;
+            text-align: left;
+            font-size: 1rem;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <form id="scraperForm">
+            <h1>Web Scraper</h1>
+            <label for="url">Enter Website URL:</label>
+            <input type="url" id="url" name="url" placeholder="https://example.com" required>
+            <button type="submit" id="scrapeBtn">Scrape</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('scraperForm');
+        const scrapeBtn = document.getElementById('scrapeBtn');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            scrapeBtn.textContent = 'Scraping...';
+            scrapeBtn.disabled = true;
+
+            const url = document.getElementById('url').value;
+
+            try {
+                const response = await fetch('/scrape', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    message.innerHTML = `<a href="${data.excelFilePath}" download>Download Excel File</a>`;
+                } else {
+                    message.textContent = `Error: ${data.error || 'Failed to scrape the website.'}`;
+                }
+            } catch (error) {
+                message.textContent = `Error: ${error.message}`;
+            } finally {
+                scrapeBtn.textContent = 'Scrape';
+                scrapeBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
