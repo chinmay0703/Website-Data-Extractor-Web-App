@@ -18,7 +18,7 @@ Organized and easy-to-navigate output.
 Clone the Repository
 
 ```bash
-git clone https://github.com/chinmay0703/webscraper.git
+[git clone https://github.com/chinmay0703/webscraper.git](https://github.com/chinmay0703/webscraper.git)
 ```
 Install Dependencies
 
